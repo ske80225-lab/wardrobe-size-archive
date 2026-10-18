@@ -667,5 +667,33 @@ window.SEED_ITEMS = [
     "image": "images/items/item-23.webp",
     "note": "",
     "createdAt": "2025-03-07T10:00:00+09:00"
+  },
+  {
+    "id": "seed-24",
+    "brand": "FreshService",
+    "name": "2-PACK CORPORATE S/S TEE",
+    "category": "tee",
+    "size": "M",
+    "measurements": [
+      {
+        "key": "肩幅",
+        "value": "56.5"
+      },
+      {
+        "key": "身幅",
+        "value": "64"
+      },
+      {
+        "key": "着丈",
+        "value": "74.5"
+      },
+      {
+        "key": "袖丈",
+        "value": "23"
+      }
+    ],
+    "image": "images/items/item-24.webp",
+    "note": "",
+    "createdAt": "2026-10-18T17:36:00+09:00"
   }
 ];
