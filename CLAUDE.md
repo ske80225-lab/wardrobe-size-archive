@@ -11,7 +11,10 @@
 - 状況（2026-10-18）：プレビュー段階。`tools/server.py` で一覧・並び替え・絞り込み・投稿（webp 保存）・詳細・削除の動作確認済み
 - **運用方針（2026-10-18 ユーザー決定）**：スマホでも投稿・閲覧したい／GitHub Pages で公開してどこからでも見たい
   → 公開サイトは **GitHub Pages ＋ Google ドライブ（GAS）保存**。`tools/server.py`（images/items に webp 保存）は Mac 上で使うローカル用として残す
-- git：このフォルダで `git init` 済み（`main`）。GitHub リポジトリ作成・push・Pages 有効化は**ユーザー確認待ち**（アカウント `ske80225-lab`、エンブレム図鑑と同じ。無料プランの Pages は公開リポジトリ＝服の写真・サイズも公開になる）
+- 公開：GitHub Pages（2026-10-18 公開）
+  - サイト：https://ske80225-lab.github.io/wardrobe-size-archive/
+  - リポジトリ：https://github.com/ske80225-lab/wardrobe-size-archive （**public**、`origin` / `main`、Pages は main のルートから配信）
+  - push すると1〜2分で反映。服の写真・サイズも公開されている前提
 - GAS のデプロイはユーザーの Google アカウントでの手作業（Claude からはできない）
 
 ## ファイル構成
@@ -96,5 +99,4 @@ cd "/Users/yosukekobayashi/Desktop/Claude Code Works/サイズ表" && python3 to
 
 - 投稿アイテムの編集
 - 外部URL画像（初期データ4件）はリンク切れの可能性あり。images/items に webp で取り込むかは未決定
-- GitHub リポジトリ作成・push・Pages 有効化（ユーザー確認待ち）
 - GAS のデプロイと、スマホ（iPhone Safari）での投稿・webp 変換の実機確認
