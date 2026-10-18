@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wardrobe Size Archive</title>
+  <meta name="description" content="手持ちの服の実寸サイズを一覧・並び替えできるポータル。">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <meta name="theme-color" content="#2c3437">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <h1 class="site-header__title">Wardrobe Size Archive</h1>
+  </header>
+
+  <!-- 右上の固定ボタン（投稿・検索） -->
+  <div class="corner-actions">
+    <button type="button" class="corner-btn" id="postToggle" aria-label="アイテムを投稿する">
+      <svg width="26" height="26" viewBox="0 0 33 33" aria-hidden="true"><path d="M15.28 4.9h2.44v23.2h-2.44zM4.9 15.28h23.2v2.44H4.9z" fill="currentColor"/></svg>
+    </button>
+    <button type="button" class="corner-btn" id="searchToggle"
+            aria-label="検索メニューを開く" aria-expanded="false" aria-controls="searchPanel">
+      <img src="images/ui/search.svg" alt="" width="24.5" height="24.5">
+    </button>
+  </div>
+
+  <!-- 件数・並び替え -->
+  <div class="toolbar">
+    <p class="toolbar__count" id="resultCount" aria-live="polite"></p>
+    <div class="sort">
+      <label class="sort__label" for="sortKey">Sort</label>
+      <div class="sort__select">
+        <select id="sortKey"></select>
+      </div>
+      <button type="button" class="sort__dir" id="sortDir" aria-label="並び順を切り替え"></button>
+    </div>
+  </div>
+
+  <main>
+    <ul class="item-grid" id="itemGrid"></ul>
+    <p class="empty" id="emptyState" hidden>条件に一致するアイテムがありません。</p>
+  </main>
+
+  <footer class="site-footer">
+    <p id="footerNote"></p>
+  </footer>
+
+  <!-- 検索メニュー -->
+  <div class="search-overlay" id="searchOverlay" hidden></div>
+  <aside class="search-panel" id="searchPanel" aria-label="検索メニュー" aria-hidden="true" inert>
+    <button type="button" class="search-panel__close" id="searchClose" aria-label="検索メニューを閉じる">
+      <img src="images/ui/close.svg" alt="" width="22" height="22">
+    </button>
+
+    <div class="search-panel__body">
+      <div class="search-row">
+        <label class="search-row__label" for="searchInput">Keyword</label>
+        <div class="search-row__control">
+          <input type="search" class="search-input" id="searchInput" autocomplete="off" placeholder="ブランド・アイテム名">
+        </div>
+      </div>
+
+      <div class="search-row">
+        <p class="search-row__label">Category</p>
+        <div class="search-row__control pill-list" id="filterCategory"></div>
+      </div>
+
+      <div class="search-row">
+        <p class="search-row__label">Brand</p>
+        <div class="search-row__control pill-list" id="filterBrand"></div>
+      </div>
+
+      <div class="search-row search-row--center">
+        <p class="search-row__label">Size</p>
+        <div class="search-row__control pill-list" id="filterSize"></div>
+      </div>
+
+      <div class="search-panel__footer">
+        <button type="button" class="action-btn action-btn--wide" id="searchApply">
+          <img class="action-btn__icon" src="images/ui/btn-search.svg" alt="" width="14" height="14">Search
+        </button>
+        <button type="button" class="action-btn" id="clearFilters">Clear</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- アイテム詳細 -->
+  <dialog class="modal" id="itemModal" aria-labelledby="modalTitle">
+    <div class="modal__inner">
+      <button type="button" class="modal__close" data-close aria-label="閉じる">×</button>
+      <div id="modalBody"></div>
+    </div>
+  </dialog>
+
+  <!-- 投稿フォーム -->
+  <dialog class="modal modal--form" id="postModal" aria-labelledby="postTitle">
+    <form class="modal__inner post-form" id="postForm" novalidate>
+      <button type="button" class="modal__close" data-close aria-label="閉じる">×</button>
+      <h2 class="post-form__title" id="postTitle">New Item</h2>
+      <p class="post-form__mode" id="postMode"></p>
+
+      <div class="post-form__grid">
+        <!-- 画像 -->
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="postImage" accept="image/*" class="dropzone__input">
+          <img class="dropzone__preview" id="postPreview" alt="" hidden>
+          <div class="dropzone__hint" id="dropHint">
+            <svg width="28" height="28" viewBox="0 0 33 33" aria-hidden="true"><path d="M15.28 4.9h2.44v23.2h-2.44zM4.9 15.28h23.2v2.44H4.9z" fill="currentColor"/></svg>
+            <span>画像を選択<br><small>ドラッグ＆ドロップも可</small></span>
+          </div>
+        </div>
+
+        <div class="post-form__fields">
+          <div class="field">
+            <label class="field__label" for="postBrand">ブランド <em>必須</em></label>
+            <input class="field__input" id="postBrand" list="brandList" required autocomplete="off">
+            <datalist id="brandList"></datalist>
+          </div>
+          <div class="field">
+            <label class="field__label" for="postName">アイテム名 <em>必須</em></label>
+            <input class="field__input" id="postName" required autocomplete="off">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label class="field__label" for="postCategory">カテゴリ</label>
+              <select class="field__input" id="postCategory"></select>
+            </div>
+            <div class="field">
+              <label class="field__label" for="postSize">サイズ表記</label>
+              <input class="field__input" id="postSize" placeholder="M / 2 / W79 など" autocomplete="off">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="post-form__section">
+        <div class="post-form__section-head">
+          <h3 class="detail__heading">実寸（cm）</h3>
+          <button type="button" class="text-btn" id="addMeasure">＋ 項目を追加</button>
+        </div>
+        <div class="measure-list" id="measureList"></div>
+        <datalist id="measureKeys"></datalist>
+      </section>
+
+      <section class="post-form__section">
+        <label class="detail__heading" for="postNote">メモ</label>
+        <textarea class="field__input field__input--area" id="postNote" rows="2" placeholder="購入店・着用感など"></textarea>
+      </section>
+
+      <!-- GAS 保存のときだけ表示。入力した合言葉はこの端末に記憶する -->
+      <section class="post-form__section post-form__key" id="postKeyField" hidden>
+        <label class="detail__heading" for="postKey">合言葉</label>
+        <input class="field__input" id="postKey" type="password" autocomplete="current-password">
+      </section>
+
+      <p class="post-form__error" id="postError" role="alert" hidden></p>
+
+      <div class="post-form__actions">
+        <button type="button" class="action-btn action-btn--line" data-close>キャンセル</button>
+        <button type="submit" class="action-btn action-btn--dark action-btn--wide" id="postSubmit">投稿する</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/master.js"></script>
+  <script src="js/data/items.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

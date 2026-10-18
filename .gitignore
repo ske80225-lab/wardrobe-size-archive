@@ -1,0 +1,5 @@
+.DS_Store
+# ローカル保存サーバー（tools/server.py）の投稿データ。公開サイトは GAS を使う
+data/
+images/items/p-*.webp
+images/items/.trash/
