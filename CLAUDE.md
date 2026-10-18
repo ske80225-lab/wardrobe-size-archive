@@ -29,6 +29,8 @@
 | `data/posts.json` | 投稿データ（配列）。一覧は SEED_ITEMS ＋ これ |
 | `gas/Code.gs` | Google Apps Script：画像→ドライブ、データ→スプレッドシート |
 | `images/items/` | Notion から取り込んだ画像（`item-01.webp` など。番号は Notion の並び順。スマホ向けに全部 webp・長辺1200px 以下に変換済み、計約600KB）＋投稿画像（`p-xxxx.webp`）。削除した投稿の画像は `.trash/` に移す |
+| `images/icons/` | ファビコン一式。元画像 `source-56.png`（ユーザー提供の「SIZE」56×56）から生成：`favicon.ico`（16/32/48、ルート）、`favicon-32.png`、`apple-touch-icon.png`（180）、`icon-192/512.png`。180以上は拡大なので少しぼやける → 大きい元画像があれば作り直す。ホーム画面用は角を地色 `#505050` で塗る |
+| `site.webmanifest` | ホーム画面に追加したときの名前「Size」・アイコン・色 |
 | `images/ui/` | エンブレム図鑑からコピーした UI アイコン（search / close / plus / btn-search） |
 
 ## アイテムデータの形
